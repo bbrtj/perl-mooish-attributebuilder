@@ -10,7 +10,7 @@ subtest 'testing init_arg with "1" on public field' => sub {
 
 	is_deeply
 		\%params,
-		{ is => 'ro', required => 1, init_arg => 'param' },
+		{is => 'ro', required => 1, init_arg => 'param'},
 		'return value ok';
 };
 
@@ -19,7 +19,7 @@ subtest 'testing init_arg with "1" on hidden field' => sub {
 
 	is_deeply
 		\%params,
-		{ is => 'ro', required => 1, init_arg => '_param' },
+		{is => 'ro', required => 1, init_arg => '_param'},
 		'return value ok';
 };
 
@@ -28,7 +28,7 @@ subtest 'testing init_arg with -public on hidden field' => sub {
 
 	is_deeply
 		\%params,
-		{ is => 'ro', required => 1, init_arg => 'param' },
+		{is => 'ro', required => 1, init_arg => 'param'},
 		'return value ok';
 };
 
@@ -37,7 +37,7 @@ subtest 'testing init_arg with -hidden on public field' => sub {
 
 	is_deeply
 		\%params,
-		{ is => 'ro', required => 1, init_arg => '_param' },
+		{is => 'ro', required => 1, init_arg => '_param'},
 		'return value ok';
 };
 

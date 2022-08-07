@@ -11,7 +11,7 @@ subtest 'testing public reader on public field' => sub {
 	is $name, 'field', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, reader => 'get_field'},
+		{is => 'ro', init_arg => undef, reader => 'get_field'},
 		'return value ok';
 };
 
@@ -21,7 +21,7 @@ subtest 'testing public reader (forced) on public field' => sub {
 	is $name, 'field', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, reader => 'get_field'},
+		{is => 'ro', init_arg => undef, reader => 'get_field'},
 		'return value ok';
 };
 
@@ -31,7 +31,7 @@ subtest 'testing hidden reader (forced) on public field' => sub {
 	is $name, 'field', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, reader => '_get_field'},
+		{is => 'ro', init_arg => undef, reader => '_get_field'},
 		'return value ok';
 };
 
@@ -41,7 +41,7 @@ subtest 'testing hidden reader on hidden field' => sub {
 	is $name, '_field', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, reader => '_get_field'},
+		{is => 'ro', init_arg => undef, reader => '_get_field'},
 		'return value ok';
 };
 
@@ -51,7 +51,7 @@ subtest 'testing hidden reader (forced) on hidden field' => sub {
 	is $name, '_field', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, reader => '_get_field'},
+		{is => 'ro', init_arg => undef, reader => '_get_field'},
 		'return value ok';
 };
 
@@ -61,7 +61,7 @@ subtest 'testing public reader (forced) on hidden field' => sub {
 	is $name, '_field', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, reader => 'get_field'},
+		{is => 'ro', init_arg => undef, reader => 'get_field'},
 		'return value ok';
 };
 

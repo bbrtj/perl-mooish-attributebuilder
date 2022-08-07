@@ -11,6 +11,7 @@ BEGIN {
 }
 
 {
+
 	package TestMooParent;
 
 	use Moo;
@@ -38,6 +39,7 @@ BEGIN {
 }
 
 {
+
 	package TestMoo;
 
 	use Moo;
@@ -91,7 +93,6 @@ subtest 'testing fields' => sub {
 	$obj->set_rw_trigger('some value');
 	ok !$obj->has_lazy_built, 'predicate ok (after trigger)';
 };
-
 
 done_testing;
 

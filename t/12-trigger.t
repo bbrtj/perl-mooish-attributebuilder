@@ -6,6 +6,7 @@ use Test::More;
 use MooseY::FieldBuilder;
 
 {
+
 	package TestWithTrigger;
 
 	sub new

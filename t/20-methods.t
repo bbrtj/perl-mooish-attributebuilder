@@ -35,7 +35,7 @@ for my $argument (sort keys %expected_prefixes) {
 			is $name, 'field', 'name ok';
 			is_deeply
 				\%params,
-				{ is => 'ro', init_arg => undef, $method_type => "$expected_prefixes{$argument}{$method_type}_field"},
+				{is => 'ro', init_arg => undef, $method_type => "$expected_prefixes{$argument}{$method_type}_field"},
 				'return value ok';
 		};
 	}

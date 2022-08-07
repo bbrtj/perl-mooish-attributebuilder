@@ -14,7 +14,7 @@ subtest 'testing param()' => sub {
 	is $name, 'param', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', required => 1, f => 'v' },
+		{is => 'ro', required => 1, f => 'v'},
 		'return value ok';
 };
 
@@ -24,7 +24,7 @@ subtest 'testing option()' => sub {
 	is $name, 'option', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', required => 0, predicate => 'has_option', f => 'v' },
+		{is => 'ro', required => 0, predicate => 'has_option', f => 'v'},
 		'return value ok';
 };
 
@@ -34,7 +34,7 @@ subtest 'testing field()' => sub {
 	is $name, 'field', 'name ok';
 	is_deeply
 		\%params,
-		{ is => 'ro', f => 'v', init_arg => undef },
+		{is => 'ro', f => 'v', init_arg => undef},
 		'return value ok';
 };
 
@@ -44,7 +44,7 @@ subtest 'testing extended()' => sub {
 	is $name, '+field', 'name ok';
 	is_deeply
 		\%params,
-		{ f => 'v' },
+		{f => 'v'},
 		'return value ok';
 };
 

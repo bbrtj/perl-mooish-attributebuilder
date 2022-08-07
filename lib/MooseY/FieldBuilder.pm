@@ -122,7 +122,8 @@ sub expand_shortcuts
 
 		my $is_protected =
 			$args{$method_type} eq -hidden
-			|| ($args{$method_type} eq '1'
+			|| (
+				$args{$method_type} eq '1'
 				&& ($protected_field || $PROTECTED_METHODS{$method_type})
 			);
 

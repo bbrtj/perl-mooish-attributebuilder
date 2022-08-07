@@ -6,12 +6,12 @@ use Test::More;
 use MooseY::FieldBuilder;
 
 subtest 'testing lazy with default' => sub {
-	my $subref = sub {};
+	my $subref = sub { };
 	my ($name, %params) = field 'param', lazy => $subref;
 
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, lazy => 1, default => $subref },
+		{is => 'ro', init_arg => undef, lazy => 1, default => $subref},
 		'return value ok';
 };
 
@@ -20,7 +20,7 @@ subtest 'testing lazy with builder name' => sub {
 
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, lazy => 1, builder => 'sub' },
+		{is => 'ro', init_arg => undef, lazy => 1, builder => 'sub'},
 		'return value ok';
 };
 
@@ -29,7 +29,7 @@ subtest 'testing lazy with "1"' => sub {
 
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, lazy => 1, builder => '_build_param' },
+		{is => 'ro', init_arg => undef, lazy => 1, builder => '_build_param'},
 		'return value ok';
 };
 
@@ -38,7 +38,7 @@ subtest 'testing lazy with "0"' => sub {
 
 	is_deeply
 		\%params,
-		{ is => 'ro', init_arg => undef, lazy => 0 },
+		{is => 'ro', init_arg => undef, lazy => 0},
 		'return value ok';
 };
 
