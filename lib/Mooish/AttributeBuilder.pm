@@ -1,4 +1,4 @@
-package MooseY::FieldBuilder;
+package Mooish::AttributeBuilder;
 
 use v5.10;
 use strict;
@@ -146,5 +146,5 @@ sub expand_shortcuts
 
 1;
 
-# ABSTRACT: build Moose field definitions with less boilerplate
+# ABSTRACT: build Mooish attribute definitions with less boilerplate
 

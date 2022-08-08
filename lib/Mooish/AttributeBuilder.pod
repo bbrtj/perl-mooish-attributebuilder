@@ -1,44 +1,46 @@
 =head1 NAME
 
-MooseY::FieldBuilder - build Moose field definitions with less boilerplate
+Mooish::AttributeBuilder - build Mooish attribute definitions with less boilerplate
 
 =head1 SYNOPSIS
 
-	use Moo; # or Moose or Mouse
-	use MooseY::FieldBuilder;
+	use Moo; # or Moose or Mouse or ...
+	use Mooish::AttributeBuilder;
 
-	# this property is required on constructor
+	# this attribute is required in the constructor
 	has param 'param_name';
 	has param 'param_name' => (
 		...
 	);
 
-	# this property is optional on constructor
+	# this attribute is optional in the constructor
 	has option 'option_name';
 	has option 'option_name' => (
 		...
 	);
 
-	# this property is not available on constructor
+	# this attribute is not available in the constructor
 	has field 'field_name';
 	has field 'field_name' => (
 		...
 	);
 
-	# this extends parent property, much like: has '+name_to_extend'
+	# this extends parent attribute, much like: has '+name_to_extend'
 	has extended 'name_to_extend' => (
 		...
 	);
 
 =head1 DESCRIPTION
 
-This module implements shortcuts and helpers for 'has' keyword in Moose family of modules.
+This module implements shortcuts and helpers for C<has> keyword in Moose family of modules.
 
 The shortcuts provided are similar to those in L<MooseX::Extended> or
 L<MooX::Keyword::Field>, but they don't depend on specific OO system. Instead,
 those shortcuts are just modifying option lists which are then passed to
 C<has>. This way you can use the module with any OO system which supports the
 Moose set of C<has> parameters.
+
+B<Beta>: interface is not yet stable before version 1.000.
 
 =head1 EXPORTED FUNCTIONS
 
@@ -48,7 +50,7 @@ All functions are exported by default.
 
 	has field $field_name => %more_options;
 
-This function produces a property that cannot be passed in the constructor:
+This function produces a property that cannot be passed to the constructor:
 
 	has $field_name => (
 		is => 'ro',
@@ -60,7 +62,7 @@ This function produces a property that cannot be passed in the constructor:
 
 	has param $param_name => %more_options;
 
-This function produces a property that is required on constructor:
+This function produces a property that is required in the constructor:
 
 	has $param_name => (
 		is => 'ro',
@@ -72,7 +74,7 @@ This function produces a property that is required on constructor:
 
 	has option $option_name => %more_options;
 
-This function produces a property that is optional on constructor and has a predicate:
+This function produces a property that is optional in the constructor and has a predicate:
 
 	has $option_name => (
 		is => 'ro',
@@ -213,7 +215,7 @@ Note: passing C<1> will work as described in L</method name shortcuts>.
 
 As long as it is a blessed reference (object).
 
-=head2 builder / default and required
+=head2 builder / default + required
 
 Having a C<builder> or a C<default> will automatically remove C<required> from the option list.
 
@@ -243,10 +245,10 @@ now be passed both as a anon sub (like C<default>) or as a package sub name
 
 =over
 
-=item
+=item All attributes produced are 'ro' by default
 
-Since the module does not depend on specific OO implementation, the only C<< is => >>
-options available are C<ro> and C<rw> (as in base Moose). The author considers
+Since the module does not depend on specific OO implementation, the only common
+C<< is => >> options are C<ro> and C<rw> (as in base Moose). The author considers
 C<rw> to be a I<bad idea> most of the time. Having one method for reading and
 writing can lead to bugs that are hard to spot.
 
@@ -256,11 +258,32 @@ C<< writer => -hidden >> shortcut does more or less what C<rwp> does.
 
 C<< lazy => 1 >> shortcut does more or less what C<lazy> does.
 
-=item
+=item Partial MooseX::AttributeShortcuts compatibility
 
 The module implements many of the shortcuts from L<MooseX::AttributeShortcuts>,
 but does not aim to have 100% compatibility. Some details in overlapping
 functionality may differ.
 
 =back
+
+=head1 SEE ALSO
+
+=over
+
+=item L<MooseX::Extended>
+
+=item L<MooseX::AttributeShortcuts>
+
+=back
+
+=head1 AUTHOR
+
+Bartosz Jarzyna E<lt>bbrtj.pro@gmail.comE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2022 by Bartosz Jarzyna
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 

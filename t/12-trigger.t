@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Test::More;
-use MooseY::FieldBuilder;
+use Mooish::AttributeBuilder;
 
 {
 

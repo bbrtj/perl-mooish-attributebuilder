@@ -1,8 +1,8 @@
-# (Name TBD) MooseY::FieldBuilder
-A Perl module for building Moose field definitions with less boilerplate.
+# Mooish::AttributeBuilder
+A Perl module for building Mooish attribute definitions with less boilerplate.
 
 ## Code and documentation
-Coming soon.
+[Mooish::AttributeBuilder on CPAN](https://metacpan.org/release/Mooish-AttributeBuilder)
 
 ## Bugs and feature requests
 Please use the Github's issue tracker to file both bugs and feature requests.

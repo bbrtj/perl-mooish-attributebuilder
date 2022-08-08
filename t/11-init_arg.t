@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Test::More;
-use MooseY::FieldBuilder;
+use Mooish::AttributeBuilder;
 
 subtest 'testing init_arg with "1" on public field' => sub {
 	my ($name, %params) = param 'param', init_arg => 1;

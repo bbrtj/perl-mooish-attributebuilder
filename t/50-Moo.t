@@ -15,7 +15,7 @@ BEGIN {
 	package TestMooParent;
 
 	use Moo;
-	use MooseY::FieldBuilder;
+	use Mooish::AttributeBuilder;
 
 	has param 'mandatory';
 
@@ -43,7 +43,7 @@ BEGIN {
 	package TestMoo;
 
 	use Moo;
-	use MooseY::FieldBuilder;
+	use Mooish::AttributeBuilder;
 
 	extends 'TestMooParent';
 

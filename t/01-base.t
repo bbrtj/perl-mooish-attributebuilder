@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 
 BEGIN {
-	use_ok('MooseY::FieldBuilder');
+	use_ok('Mooish::AttributeBuilder');
 }
 
 subtest 'testing param()' => sub {
