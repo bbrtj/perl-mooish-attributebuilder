@@ -170,7 +170,17 @@ sub expand_shortcuts
 		delete $args{required};
 	}
 
-	return expand_method_names($name, %args);
+	# method names from shortcuts
+	%args = expand_method_names($name, %args);
+
+	# literal parameters (prepended with -)
+	for my $literal (keys %args) {
+		if ($literal =~ m{\A - (.+) \z}x) {
+			$args{$1} = delete $args{$literal};
+		}
+	}
+
+	return %args;
 }
 
 1;

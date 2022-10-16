@@ -232,7 +232,7 @@ This can be useful to turn C<_name> into C<name> in the constructor with the hel
 
 	# no underscore in the constructor
 	has param '_name' => (
-		init_arg => -public
+		init_arg => -public,
 	);
 
 =head2 trigger
@@ -240,6 +240,17 @@ This can be useful to turn C<_name> into C<name> in the constructor with the hel
 In addition to shortcuts described in L</method name shortcuts>, C<trigger> can
 now be passed both as a anon sub (like C<default>) or as a package sub name
 (like C<builder>).
+
+=head2 use parameter value without expanding
+
+In case you want to fall back to default behavior of some C<has> parameters,
+you can prepend their names with a hyphen:
+
+	# 'builder' will be expanded, but 'writer' won't
+	has field 'auto' => (
+		builder => 1,
+		-writer => 1,
+	);
 
 =head1 CAVEATS
 
@@ -256,6 +267,11 @@ These constructions work, but since we operate on a single C<has> here,
 C<%params> can't contain shortcuts which produces method names - that would
 lead to multiple fields using same methods. The module will die with a helpful
 error message if it encounters something that it can't handle properly.
+
+If you encounter this problem, you might want to
+L</use parameter value without expanding> to fall back to regular shortcut modules
+(like L<MooseX::AttributeShortcuts>). This module will not automatically change its
+behavior to do so, so it does not surprise you.
 
 =item All attributes produced are 'ro' by default
 
