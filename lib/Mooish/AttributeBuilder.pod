@@ -245,6 +245,18 @@ now be passed both as a anon sub (like C<default>) or as a package sub name
 
 =over
 
+=item Partial support for multiple attributes per 'has'
+
+The module lets you write for example:
+
+	has field ['f1', 'f2'] => %params;
+	has extended ['f3', 'f4'] => %params;
+
+These constructions work, but since we operate on a single C<has> here,
+C<%params> can't contain shortcuts which produces method names - that would
+lead to multiple fields using same methods. The module will die with a helpful
+error message if it encounters something that it can't handle properly.
+
 =item All attributes produced are 'ro' by default
 
 Since the module does not depend on specific OO implementation, the only common
