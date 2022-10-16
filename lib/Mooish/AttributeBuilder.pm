@@ -69,7 +69,7 @@ sub extended
 
 	my $extended_name;
 	if (ref $name eq 'ARRAY') {
-		$extended_name = [ map { "+$_" } @{$name} ];
+		$extended_name = [map { "+$_" } @{$name}];
 	}
 	else {
 		$extended_name = "+$name";

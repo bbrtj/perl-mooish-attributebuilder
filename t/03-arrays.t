@@ -7,7 +7,7 @@ use Mooish::AttributeBuilder;
 use Data::Dumper;
 
 subtest 'testing array with default' => sub {
-	my $default_sub = sub {};
+	my $default_sub = sub { };
 	my ($name, %params) = field ['field1', 'field2'], default => $default_sub;
 
 	is_deeply $name, ['field1', 'field2'], 'name ok';
