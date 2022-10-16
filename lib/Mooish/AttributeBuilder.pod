@@ -40,8 +40,6 @@ those shortcuts are just modifying option lists which are then passed to
 C<has>. This way you can use the module with any OO system which supports the
 Moose set of C<has> parameters.
 
-B<Beta>: interface is not yet stable before version 1.000.
-
 =head1 EXPORTED FUNCTIONS
 
 All functions are exported by default.
