@@ -15,6 +15,8 @@ our @EXPORT = qw(
 	extended
 );
 
+# List of available types. May be extended if a custom function will call
+# expand_shortcuts
 our %TYPES = (
 	field => {
 		is => 'ro',
@@ -32,10 +34,15 @@ our %TYPES = (
 	extended => {},
 );
 
+# Prefix of protected methods. Will be joined with the rest of the method name
+# with an underscore, so an empty prefix means starting with an underscore
 our $PROTECTED_PREFIX = '';
 
+# The list of methods which are protected by default
 our %PROTECTED_METHODS = map { $_ => 1 } qw(builder trigger);
 
+# The list of method name prefixes. Undef means no prefix at all, just use
+# attribute name
 our %METHOD_PREFIXES = (
 	reader => 'get',
 	writer => 'set',
