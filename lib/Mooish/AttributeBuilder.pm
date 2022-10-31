@@ -27,6 +27,107 @@ our %METHOD_PREFIXES = (
 	init_arg => undef,
 );
 
+my @shortcuts;
+my @builtin_shortcuts = (
+
+	# merge lazy + default / lazy + builder
+	sub {
+		my ($name, %args) = @_;
+
+		if ($args{lazy}) {
+			my $lazy = $args{lazy};
+			$args{lazy} = 1;
+
+			if (ref $lazy eq 'CODE') {
+				check_and_set(\%args, $name, default => $lazy);
+			}
+			else {
+				check_and_set(\%args, $name, builder => $lazy);
+			}
+		}
+
+		return %args;
+	},
+
+	# merge coerce + isa
+	sub {
+		my ($name, %args) = @_;
+
+		if (blessed $args{coerce}) {
+			check_and_set(\%args, $name, isa => $args{coerce});
+			$args{coerce} = 1;
+		}
+
+		return %args;
+	},
+
+	# make sure params with defaults are not required
+	sub {
+		my ($name, %args) = @_;
+
+		if ($args{required} && (exists $args{default} || $args{builder})) {
+			delete $args{required};
+		}
+
+		return %args;
+	},
+
+	# method names from shortcuts
+	sub {
+		my ($name, %args) = @_;
+
+		# initialized lazily
+		my $normalized_name;
+		my $protected_field;
+
+		# inflate names from shortcuts
+		foreach my $method_type (keys %METHOD_PREFIXES) {
+			next unless defined $args{$method_type};
+			next if ref $args{$method_type};
+			next unless grep { $_ eq $args{$method_type} } '1', -public, -hidden;
+
+			$normalized_name //= get_normalized_name($name, $method_type);
+			$protected_field //= $name ne $normalized_name;
+
+			my $is_protected =
+				$args{$method_type} eq -hidden
+				|| (
+					$args{$method_type} eq '1'
+					&& ($protected_field || $PROTECTED_METHODS{$method_type})
+				);
+
+			$args{$method_type} = join '_', grep { defined }
+				($is_protected ? $PROTECTED_PREFIX : undef),
+				$METHOD_PREFIXES{$method_type},
+				$normalized_name;
+		}
+
+		# special treatment for trigger
+		if ($args{trigger} && !ref $args{trigger}) {
+			my $trigger = $args{trigger};
+			$args{trigger} = sub {
+				return shift->$trigger(@_);
+			};
+		}
+
+		return %args;
+	},
+
+	# literal parameters (prepended with -)
+	sub {
+		my ($name, %args) = @_;
+
+		foreach my $literal (keys %args) {
+			if ($literal =~ m{\A - (.+) \z}x) {
+				$args{$1} = delete $args{$literal};
+			}
+		}
+
+		return %args;
+	},
+
+);
+
 sub field
 {
 	my ($name, %args) = @_;
@@ -78,6 +179,17 @@ sub extended
 	return ($extended_name, expand_shortcuts($name, %args));
 }
 
+sub add_shortcut
+{
+	my ($sub) = @_;
+
+	croak 'Custom shortcut passed to add_shortcut must be a coderef'
+		unless ref $sub eq 'CODE';
+
+	push @shortcuts, $sub;
+	return;
+}
+
 # Helpers - not part of the interface
 
 sub check_and_set
@@ -101,83 +213,13 @@ sub get_normalized_name
 	return $name;
 }
 
-sub expand_method_names
-{
-	my ($name, %args) = @_;
-
-	# initialized lazily
-	my $normalized_name;
-	my $protected_field;
-
-	# inflate names from shortcuts
-	for my $method_type (keys %METHOD_PREFIXES) {
-		next unless defined $args{$method_type};
-		next if ref $args{$method_type};
-		next unless grep { $_ eq $args{$method_type} } '1', -public, -hidden;
-
-		$normalized_name //= get_normalized_name($name, $method_type);
-		$protected_field //= $name ne $normalized_name;
-
-		my $is_protected =
-			$args{$method_type} eq -hidden
-			|| (
-				$args{$method_type} eq '1'
-				&& ($protected_field || $PROTECTED_METHODS{$method_type})
-			);
-
-		$args{$method_type} = join '_', grep { defined }
-			($is_protected ? $PROTECTED_PREFIX : undef),
-			$METHOD_PREFIXES{$method_type},
-			$normalized_name;
-	}
-
-	# special treatment for trigger
-	if ($args{trigger} && !ref $args{trigger}) {
-		my $trigger = $args{trigger};
-		$args{trigger} = sub {
-			return shift->$trigger(@_);
-		};
-	}
-
-	return %args;
-}
-
 sub expand_shortcuts
 {
 	my ($name, %args) = @_;
 
-	# merge lazy + default / lazy + builder
-	if ($args{lazy}) {
-		my $lazy = $args{lazy};
-		$args{lazy} = 1;
-
-		if (ref $lazy eq 'CODE') {
-			check_and_set \%args, $name, default => $lazy;
-		}
-		else {
-			check_and_set \%args, $name, builder => $lazy;
-		}
-	}
-
-	# merge coerce + isa
-	if (blessed $args{coerce}) {
-		check_and_set \%args, $name, isa => $args{coerce};
-		$args{coerce} = 1;
-	}
-
-	# make sure params with defaults are not required
-	if ($args{required} && (exists $args{default} || $args{builder})) {
-		delete $args{required};
-	}
-
-	# method names from shortcuts
-	%args = expand_method_names($name, %args);
-
-	# literal parameters (prepended with -)
-	for my $literal (keys %args) {
-		if ($literal =~ m{\A - (.+) \z}x) {
-			$args{$1} = delete $args{$literal};
-		}
+	# NOTE: builtin shortcuts are executed after custom shortcuts
+	foreach my $sub (@shortcuts, @builtin_shortcuts) {
+		%args = $sub->($name, %args);
 	}
 
 	return %args;
