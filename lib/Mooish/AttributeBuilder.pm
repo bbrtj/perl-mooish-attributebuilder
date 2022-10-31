@@ -80,7 +80,7 @@ sub extended
 
 # Helpers - not part of the interface
 
-sub check_and_replace
+sub check_and_set
 {
 	my ($hash_ref, $name, $key, $value) = @_;
 
@@ -152,16 +152,16 @@ sub expand_shortcuts
 		$args{lazy} = 1;
 
 		if (ref $lazy eq 'CODE') {
-			check_and_replace \%args, $name, default => $lazy;
+			check_and_set \%args, $name, default => $lazy;
 		}
 		else {
-			check_and_replace \%args, $name, builder => $lazy;
+			check_and_set \%args, $name, builder => $lazy;
 		}
 	}
 
 	# merge coerce + isa
 	if (blessed $args{coerce}) {
-		check_and_replace \%args, $name, isa => $args{coerce};
+		check_and_set \%args, $name, isa => $args{coerce};
 		$args{coerce} = 1;
 	}
 
