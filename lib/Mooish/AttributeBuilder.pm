@@ -194,12 +194,16 @@ sub add_shortcut
 
 sub check_and_set
 {
-	my ($hash_ref, $name, $key, $value) = @_;
+	my ($hash_ref, $name, %pairs) = @_;
 
-	croak "Could not expand shortcut: $key already exists for $name"
-		if exists $hash_ref->{$key};
+	foreach my $key (keys %pairs) {
+		croak "Could not expand shortcut: $key already exists for $name"
+			if exists $hash_ref->{$key};
 
-	$hash_ref->{$key} = $value;
+		$hash_ref->{$key} = $pairs{$key};
+	}
+
+	return;
 }
 
 sub get_normalized_name
