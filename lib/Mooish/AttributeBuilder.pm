@@ -15,8 +15,27 @@ our @EXPORT = qw(
 	extended
 );
 
+our %TYPES = (
+	field => {
+		is => 'ro',
+		init_arg => undef,
+	},
+	param => {
+		is => 'ro',
+		required => 1,
+	},
+	option => {
+		is => 'ro',
+		required => 0,
+		predicate => 1,
+	},
+	extended => {},
+);
+
 our $PROTECTED_PREFIX = '';
+
 our %PROTECTED_METHODS = map { $_ => 1 } qw(builder trigger);
+
 our %METHOD_PREFIXES = (
 	reader => 'get',
 	writer => 'set',
@@ -29,6 +48,21 @@ our %METHOD_PREFIXES = (
 
 my @shortcuts;
 my @builtin_shortcuts = (
+
+	# expand attribute type
+	sub {
+		my ($name, %args) = @_;
+		my $type = delete $args{_type};
+
+		if ($type && $TYPES{$type}) {
+			%args = (
+				%{ $TYPES{$type} },
+				%args,
+			);
+		}
+
+		return %args;
+	},
 
 	# merge lazy + default / lazy + builder
 	sub {
@@ -132,36 +166,21 @@ sub field
 {
 	my ($name, %args) = @_;
 
-	%args = (
-		is => 'ro',
-		init_arg => undef,
-		%args,
-	);
-
-	return ($name, expand_shortcuts($name, %args));
+	return ($name, expand_shortcuts(field => $name, %args));
 }
 
 sub param
 {
 	my ($name, %args) = @_;
 
-	%args = (
-		is => 'ro',
-		required => 1,
-		%args,
-	);
-
-	return ($name, expand_shortcuts($name, %args));
+	return ($name, expand_shortcuts(param => $name, %args));
 }
 
 sub option
 {
 	my ($name, %args) = @_;
 
-	return param $name,
-		required => 0,
-		predicate => 1,
-		%args;
+	return ($name, expand_shortcuts(option => $name, %args));
 }
 
 sub extended
@@ -176,7 +195,7 @@ sub extended
 		$extended_name = "+$name";
 	}
 
-	return ($extended_name, expand_shortcuts($name, %args));
+	return ($extended_name, expand_shortcuts(extended => $name, %args));
 }
 
 sub add_shortcut
@@ -219,7 +238,9 @@ sub get_normalized_name
 
 sub expand_shortcuts
 {
-	my ($name, %args) = @_;
+	my ($attribute_type, $name, %args) = @_;
+
+	$args{_type} = $attribute_type;
 
 	# NOTE: builtin shortcuts are executed after custom shortcuts
 	foreach my $sub (@shortcuts, @builtin_shortcuts) {
