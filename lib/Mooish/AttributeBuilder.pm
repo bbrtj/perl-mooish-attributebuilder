@@ -56,7 +56,7 @@ my @builtin_shortcuts = (
 
 		if ($type && $TYPES{$type}) {
 			%args = (
-				%{ $TYPES{$type} },
+				%{$TYPES{$type}},
 				%args,
 			);
 		}

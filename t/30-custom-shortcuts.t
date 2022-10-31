@@ -27,12 +27,13 @@ Mooish::AttributeBuilder::add_shortcut(
 	sub {
 		my ($name, %args) = @_;
 
-		is_deeply \%args, {
-			_type => 'field',
-			one => 1,
-			two => 2,
-			three => 3,
-			shortcut1 => 'replaced',
+		is_deeply \%args,
+			{
+				_type => 'field',
+				one => 1,
+				two => 2,
+				three => 3,
+				shortcut1 => 'replaced',
 			},
 			'args ok';
 
@@ -44,8 +45,7 @@ Mooish::AttributeBuilder::add_shortcut(
 subtest 'testing custom shortcuts' => sub {
 	my ($name, %params) = field 'test', one => 1, two => 2, three => 3;
 
-	is_deeply
-		\%params,
+	is_deeply \%params,
 		{
 			is => 'ro',
 			init_arg => undef,
