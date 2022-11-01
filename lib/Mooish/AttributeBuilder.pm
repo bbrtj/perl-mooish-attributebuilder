@@ -67,11 +67,13 @@ sub method_prefixes
 sub import
 {
 	my ($self, $caller) = (shift, scalar caller);
+	state $export_cache = {};
 
-	my %flags = map { $_ => 1 } @_;
+	my %flags = map { $_ => $_ } @_;
 
+	my $cache_key = $self . ($flags{-standard} || '');
 	foreach my $type (keys %{$self->attribute_types}) {
-		my $function = sub {
+		my $function = $export_cache->{$cache_key . $type} //= sub {
 			my ($name, %args) = @_;
 			return $self->expand_shortcuts($flags{-standard}, $type => $name, %args);
 		};
