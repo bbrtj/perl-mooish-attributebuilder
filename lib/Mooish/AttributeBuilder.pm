@@ -7,6 +7,13 @@ use warnings;
 use Carp qw(croak);
 use Scalar::Util qw(blessed);
 
+my $set_subname;
+BEGIN {
+	if (eval { require Sub::Util } && Sub::Util->VERSION >= 1.40) {
+		$set_subname = \&Sub::Util::set_subname;
+	}
+}
+
 ### These subs can be extended in subclasses
 
 # List of available attribute types. May be extended if a custom function will
@@ -77,6 +84,9 @@ sub import
 			my ($name, %args) = @_;
 			return $self->expand_shortcuts($flags{-standard}, $type => $name, %args);
 		};
+
+		$set_subname->("${self}::${type}", $function)
+			if $set_subname;
 
 		NO_STRICT: {
 			no strict 'refs';
