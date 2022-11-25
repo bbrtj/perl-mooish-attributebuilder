@@ -301,6 +301,8 @@ flag, which will disable all custom behavior.
 
 	use Mooish::AttributeBuilder -standard;
 
+This flag was added in Mooish::AttributeBuilder version C<1.001>.
+
 =head1 CAVEATS
 
 =over
