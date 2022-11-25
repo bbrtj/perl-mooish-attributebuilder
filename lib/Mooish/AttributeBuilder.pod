@@ -191,6 +191,9 @@ be C<_build_property>.
 	lazy => 1,
 	default => sub { return 'default value' }
 
+Note: this only works for anonymous subroutines.
+Will not be expanded if explicit default / builder was passed (but does not take superclass default / builder into account).
+
 =head2 lazy + builder
 
 	lazy => 'builder_name'
@@ -201,6 +204,7 @@ be C<_build_property>.
 	builder => 'builder_name'
 
 Note: passing C<1> will work as described in L</method name shortcuts>.
+Will not be expanded if explicit default / builder was passed (but does not take superclass default / builder into account).
 
 =head2 isa + coerce
 
