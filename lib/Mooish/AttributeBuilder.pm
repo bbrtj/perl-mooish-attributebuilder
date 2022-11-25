@@ -137,7 +137,7 @@ sub standard_shortcuts
 		sub {
 			my ($name, %args) = @_;
 
-			if ($args{lazy}) {
+			if ($args{lazy} && !exists $args{default} && !$args{builder}) {
 				my $lazy = $args{lazy};
 				$args{lazy} = 1;
 
